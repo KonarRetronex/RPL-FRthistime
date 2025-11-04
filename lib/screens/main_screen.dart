@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'add_category_screen.dart'; // Ganti 'project_name'
-import 'dashboard_screen.dart'; // Ganti 'project_name'
 import 'dart:ui'; // Untuk BackdropFilter
 
+// Import relatif
+import 'add_category_screen.dart'; 
+import 'dashboard_screen.dart'; 
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -14,12 +15,18 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  // Daftar halaman sesuai desain baru
   static final List<Widget> _widgetOptions = <Widget>[
     const DashboardScreen(),
     const Center(child: Text('Halaman Statistik')), // Placeholder
     const AddCategoryScreen(), // Halaman Kategori
     const Center(child: Text('Halaman Profil')), // Placeholder
+  ];
+
+  static const List<String> _widgetTitles = <String>[
+    'Hello!',
+    'Statistic',
+    'Category',
+    'Profile',
   ];
 
   void _onItemTapped(int index) {
@@ -30,48 +37,67 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      
-      // Hapus FloatingActionButton
-      
-      // Gunakan BottomNavigationBar
-      bottomNavigationBar: Container(
-        // Ini trik untuk membuat BNB transparan
-        decoration: const BoxDecoration(
-          color: Colors.transparent,
-        ),
-        child: ClipRRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-            child: BottomNavigationBar(
-              items: const <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home_filled),
-                  label: 'Homepage',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.bar_chart),
-                  label: 'Statistic',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.category),
-                  label: 'Category',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  label: 'Profile',
-                ),
-              ],
-              currentIndex: _selectedIndex,
-              onTap: _onItemTapped,
-              // Styling diambil dari theme.dart
+    // 1. Bungkus semuanya dengan Stack
+    return Stack(
+      children: [
+        // 2. Taruh background.png di lapisan paling bawah
+        Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/background.png'),
+              fit: BoxFit.cover,
             ),
           ),
         ),
-      ),
+
+        // 3. Taruh Scaffold di atas background
+        Scaffold(
+          backgroundColor: Colors.transparent, // <-- PENTING: Buat Scaffold transparan
+          appBar: AppBar(
+            // AppBar sudah transparan dari theme, jadi akan tembus
+            title: Text(_widgetTitles.elementAt(_selectedIndex)),
+          ),
+          
+          body: _widgetOptions.elementAt(_selectedIndex),
+
+          bottomNavigationBar: Container(
+            // Trik untuk membuat BNB tembus pandang
+            decoration: const BoxDecoration(
+              color: Colors.transparent,
+            ),
+            child: ClipRRect(
+              // Ini yang memberi efek blur (Glassmorphism)
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                child: BottomNavigationBar(
+                  items: const <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.home_filled),
+                      label: 'Homepage',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.bar_chart),
+                      label: 'Statistic',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.category),
+                      label: 'Category',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.person),
+                      label: 'Profile',
+                    ),
+                  ],
+                  currentIndex: _selectedIndex,
+                  onTap: _onItemTapped,
+                  // Tema (warna, dll) sudah diatur di theme.dart
+                  // Pastikan backgroundColor di theme diatur ke transparent
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

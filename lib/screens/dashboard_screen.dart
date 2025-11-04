@@ -22,18 +22,19 @@ class DashboardScreen extends StatelessWidget {
         NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Hello!'), // Sapaan baru
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Hello!'), // Sapaan baru
+      // ),
       body: Stack(
         children: [
           // 1. Latar Belakang Gradien
           Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF4e348b), Color(0xFF2c2146)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+           decoration: const BoxDecoration(
+            image: DecorationImage(
+              // Arahkan ke gambar Anda
+              image: AssetImage('assets/images/background.png'),
+              // Pastikan gambar menutupi seluruh layar
+              fit: BoxFit.cover,
               ),
             ),
           ),
@@ -88,7 +89,7 @@ class DashboardScreen extends StatelessWidget {
                     ? const Center(
                         child: Padding(
                           padding: EdgeInsets.all(20.0),
-                          child: Text('Belum ada transaksi.'),
+                          child: Text('There are no transactions yet.'),
                         ),
                       )
                     : ListView.builder(
@@ -107,7 +108,7 @@ class DashboardScreen extends StatelessWidget {
                               onDelete: () {
                                 txProvider.deleteTransaction(tx.id);
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Transaksi dihapus!')),
+                                  const SnackBar(content: Text('Transaction deleted!')),
                                 );
                               },
                             ),
@@ -131,7 +132,7 @@ class DashboardScreen extends StatelessWidget {
         // Tombol Add Transaction
         Expanded(
           child: _ActionButton(
-            icon: Icons.add,
+            assetIconPath: 'assets/icons/bgicon.png',
             label: 'Add Transaction',
             onTap: () {
               Navigator.of(context).push(
@@ -145,7 +146,7 @@ class DashboardScreen extends StatelessWidget {
         // Tombol Monthly Budgeting
         Expanded(
           child: _ActionButton(
-              icon: Icons.pie_chart, label: 'Monthly Budgeting', onTap: () {}),
+              assetIconPath: 'assets/icons/budgetting.png', label: 'Monthly Budgeting', onTap: () {}),
         ),
         
         // Tombol Multi-Wallet SUDAH DIHAPUS
@@ -153,7 +154,7 @@ class DashboardScreen extends StatelessWidget {
         // Tombol Searching
         Expanded(
           child:
-              _ActionButton(icon: Icons.search, label: 'Searching', onTap: () {}),
+              _ActionButton(assetIconPath: 'assets/icons/search.png', label: 'Searching', onTap: () {}),
         ),
       ],
     );
@@ -162,14 +163,33 @@ class DashboardScreen extends StatelessWidget {
 
 // Widget helper untuk UI tombol
 class _ActionButton extends StatelessWidget {
-  final IconData icon;
+  final IconData? icon;          // Boleh kosong kalau pakai asset
+  final String? assetIconPath;   // Path ke asset PNG
   final String label;
   final VoidCallback onTap;
 
-  const _ActionButton({required this.icon, required this.label, required this.onTap});
+  const _ActionButton({
+    this.icon,
+    this.assetIconPath,
+    required this.label,
+    required this.onTap,
+  }) : assert(icon != null || assetIconPath != null,
+              'Either icon or assetIconPath must be provided');
 
   @override
   Widget build(BuildContext context) {
+    // Tentukan widget ikon yang akan dipakai
+    Widget iconWidget;
+    if (icon != null) {
+      iconWidget = Icon(icon, color: Colors.white, size: 30);
+    } else {
+      iconWidget = ImageIcon(
+        AssetImage(assetIconPath!),
+        size: 30,
+        color: const Color(0xFF6750A4), // bisa diubah sesuai tema
+      );
+    }
+
     return GestureDetector(
       onTap: onTap,
       child: Column(
@@ -177,13 +197,13 @@ class _ActionButton extends StatelessWidget {
           GlassCard(
             borderRadius: 50, // Lingkaran
             padding: const EdgeInsets.all(16),
-            child: Icon(icon, color: Colors.white, size: 30),
+            child: iconWidget,
           ),
           const SizedBox(height: 8),
           Text(
             label,
             style: Theme.of(context).textTheme.labelMedium,
-            textAlign: TextAlign.center, // <-- TAMBAHKAN BARIS INI
+            textAlign: TextAlign.center,
             maxLines: 2,
           ),
         ],
