@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 
-// Ganti warna ini agar sesuai dengan palet Figma Anda
 class AppColors {
-  static const Color primary = Color(0xFF6A5AED);
-  static const Color background = Color(0xFFF6F6F6);
-  static const Color card = Color(0xFFFFFFFF); // <-- BENAR (8 digit)
+  // Tema ungu gelap
+  static const Color background = Color(0xFF2C2146);
+  static const Color primary = Color(0xFFC7B8F5);
   
-  static const Color textPrimary = Color(0xFF222222);
-  static const Color textSecondary = Color(0xFF888888);
-  
-  static const Color income = Color(0xFF00A86B);
-  static const Color expense = Color(0xFFFD3C4A);
+  // Warna Teks
+  static const Color textPrimary = Colors.white;
+  static const Color textSecondary = Colors.white70;
+
+  // Warna Kaca (Glass)
+  // Warna ini akan kita gunakan dengan opacity
+  static const Color glass = Colors.white; 
+
+  // Transaksi
+  static const Color income = Color(0xFF00A86B); // Tetap hijau
+  static const Color expense = Color(0xFFFD3C4A); // Tetap merah
+
+  // Hapus warna-warna lama seperti AppColors.card
 }

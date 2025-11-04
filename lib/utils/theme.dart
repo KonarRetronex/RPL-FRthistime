@@ -5,61 +5,47 @@ import 'colors.dart';
 ThemeData buildAppTheme() {
   return ThemeData(
     primaryColor: AppColors.primary,
-    scaffoldBackgroundColor: AppColors.background,
+    scaffoldBackgroundColor: AppColors.background, // Latar belakang gelap
     colorScheme: ColorScheme.fromSeed(
       seedColor: AppColors.primary,
       background: AppColors.background,
+      brightness: Brightness.dark, // PENTING: Atur ke dark mode
     ),
     fontFamily: GoogleFonts.poppins().fontFamily,
     
-    // appBarTheme TIDAK bisa const karena titleTextStyle
-    appBarTheme: AppBarTheme( 
-      backgroundColor: AppColors.background,
+    // AppBar transparan
+    appBarTheme: AppBarTheme(
+      backgroundColor: Colors.transparent, // Transparan
       elevation: 0,
-      centerTitle: true,
+      centerTitle: false, // Sesuai gambar, judul di kiri
       titleTextStyle: GoogleFonts.poppins(
         color: AppColors.textPrimary,
-        fontSize: 18,
+        fontSize: 24, // Lebih besar
         fontWeight: FontWeight.w600,
       ),
-      iconTheme: const IconThemeData(color: AppColors.textPrimary), // Ini BOLEH const
+      iconTheme: const IconThemeData(color: AppColors.textPrimary),
     ),
     
-    // cardTheme BISA const
-  // cardTheme BISA const
-   // cardTheme BISA const
-    cardTheme: CardThemeData( // <-- Biarkan const di LUAR ini
-      elevation: 0,
-      color: AppColors.card,
-      
-      // Hapus 'const' dari sini
-      shape: RoundedRectangleBorder( 
-        
-        // Hapus 'const' dari sini juga
-        borderRadius: BorderRadius.circular(16.0), 
-      ),
-    ), // CardThemeData
-    
-    floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: AppColors.primary,
-      foregroundColor: Colors.white,
-    ),
-    
-    // bottomNavigationBarTheme TIDAK bisa const karena unselectedItemColor
-    bottomNavigationBarTheme: BottomNavigationBarThemeData( 
-      backgroundColor: AppColors.card,
-      selectedItemColor: AppColors.primary,
-      unselectedItemColor: AppColors.textSecondary.withOpacity(0.7), // Ini tidak const
-      elevation: 0,
-      type: BottomNavigationBarType.fixed,
-    ),
-    
-    // textTheme TIDAK bisa const karena GoogleFonts
-    textTheme: TextTheme( 
+    // Teks
+    textTheme: TextTheme(
       displayLarge: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 32, color: AppColors.textPrimary),
       headlineMedium: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 20, color: AppColors.textPrimary),
       bodyMedium: GoogleFonts.poppins(fontSize: 14, color: AppColors.textPrimary),
-      labelMedium: GoogleFonts.poppins(fontSize: 12, color: AppColors.textPrimary),
+      labelMedium: GoogleFonts.poppins(fontSize: 12, color: AppColors.textSecondary),
+    ),
+    
+    // Hapus cardTheme (kita akan pakai GlassCard)
+    // Hapus floatingActionButtonTheme (kita tidak pakai FAB)
+    
+    // Tema Bottom Navigasi
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: AppColors.glass.withOpacity(0.1), // Efek kaca
+      selectedItemColor: AppColors.primary,
+      unselectedItemColor: AppColors.textSecondary,
+      elevation: 0,
+      type: BottomNavigationBarType.fixed,
+      showSelectedLabels: true,
+      showUnselectedLabels: true,
     ),
   );
 }

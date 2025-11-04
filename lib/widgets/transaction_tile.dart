@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import '../models/category_model.dart';
 import '../models/transaction_model.dart';
 import '../utils/colors.dart';
+import 'glass_card.dart';
 
 class TransactionTile extends StatelessWidget {
   final TransactionModel transaction;
@@ -23,24 +24,28 @@ class TransactionTile extends StatelessWidget {
     final isIncome = transaction.type == TransactionType.income;
     final color = isIncome ? AppColors.income : AppColors.expense;
     final sign = isIncome ? '+' : '-';
+    // Ganti ikon berdasarkan kategori (Contoh sederhana)
+    final icon = category.name.toLowerCase() == 'shopping' 
+                 ? Icons.shopping_bag 
+                 : Icons.wallet_travel; // Ikon default
 
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 6.0),
+    return GlassCard(
+      padding: const EdgeInsets.all(12.0),
       child: ListTile(
+        contentPadding: EdgeInsets.zero,
         leading: CircleAvatar(
-          backgroundColor: color.withOpacity(0.1),
-          child: Icon(
-            isIncome ? Icons.arrow_downward : Icons.arrow_upward,
-            color: color,
-            size: 20,
-          ),
+          backgroundColor: AppColors.glass.withOpacity(0.2),
+          child: Icon(icon, color: Colors.white, size: 24),
         ),
         title: Text(
           category.name,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary,
+              ),
         ),
         subtitle: Text(
-          DateFormat('dd MMMM yyyy').format(transaction.date),
+          DateFormat('E, dd/MM/yyyy').format(transaction.date), // Format tanggal baru
           style: Theme.of(context).textTheme.labelMedium,
         ),
         trailing: Row(
@@ -53,8 +58,10 @@ class TransactionTile extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
             ),
+            // Tombol delete (mungkin di-hide agar UI lebih bersih, 
+            // atau ganti dengan gestur 'onLongPress' pada GlassCard)
             IconButton(
-              icon: Icon(Icons.delete_outline, color: Colors.grey[400]),
+              icon: Icon(Icons.delete_outline, color: Colors.grey[600]),
               onPressed: onDelete,
             ),
           ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'add_category_screen.dart'; // Ganti 'project_name'
 import 'dashboard_screen.dart'; // Ganti 'project_name'
-import 'add_transaction_screen.dart';
+import 'dart:ui'; // Untuk BackdropFilter
 import '../utils/colors.dart';
 
 class MainScreen extends StatefulWidget {
@@ -14,10 +14,12 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
+  // Daftar halaman sesuai desain baru
   static final List<Widget> _widgetOptions = <Widget>[
     const DashboardScreen(),
-    // Placeholder untuk halaman Kategori jika Anda mau memisahkannya
-    const AddCategoryScreen(), // Saya gunakan ini sebagai halaman ke-2
+    const Center(child: Text('Halaman Statistik')), // Placeholder
+    const AddCategoryScreen(), // Halaman Kategori
+    const Center(child: Text('Halaman Profil')), // Placeholder
   ];
 
   void _onItemTapped(int index) {
@@ -26,88 +28,47 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  void _navigateToAddTransaction() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const AddTransactionScreen(),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _navigateToAddTransaction,
-        shape: const CircleBorder(),
-        child: const Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 8.0,
-        color: AppColors.card,
-        child: SizedBox(
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              // Sisi Kiri
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MaterialButton(
-                    minWidth: 40,
-                    onPressed: () => _onItemTapped(0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.home_filled,
-                          color: _selectedIndex == 0 ? AppColors.primary : AppColors.textSecondary,
-                        ),
-                        Text(
-                          'Home',
-                          style: TextStyle(
-                            color: _selectedIndex == 0 ? AppColors.primary : AppColors.textSecondary,
-                            fontSize: 12
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              // Sisi Kanan
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MaterialButton(
-                    minWidth: 40,
-                    onPressed: () => _onItemTapped(1),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.category,
-                          color: _selectedIndex == 1 ? AppColors.primary : AppColors.textSecondary,
-                        ),
-                        Text(
-                          'Kategori',
-                          style: TextStyle(
-                            color: _selectedIndex == 1 ? AppColors.primary : AppColors.textSecondary,
-                            fontSize: 12
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
+      
+      // Hapus FloatingActionButton
+      
+      // Gunakan BottomNavigationBar
+      bottomNavigationBar: Container(
+        // Ini trik untuk membuat BNB transparan
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+        ),
+        child: ClipRRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+            child: BottomNavigationBar(
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_filled),
+                  label: 'Homepage',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.bar_chart),
+                  label: 'Statistic',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.category),
+                  label: 'Category',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: 'Profile',
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              onTap: _onItemTapped,
+              // Styling diambil dari theme.dart
+            ),
           ),
         ),
       ),
