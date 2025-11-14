@@ -30,12 +30,16 @@ class TransactionModel extends HiveObject {
   @HiveField(5)
   TransactionType type;
 
+  @HiveField(6) // <-- TAMBAHKAN NOMOR FIELD BARU
+  String title;
+
   TransactionModel({
     required this.id,
     required this.amount,
     required this.categoryId,
     required this.date,
     required this.note,
-    required this.type,
+    required this.type, 
+    required this.title
   });
 }
